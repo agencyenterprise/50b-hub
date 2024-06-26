@@ -11,15 +11,6 @@ SECRET_KEY = "1cc1f63e25876384234390d08967cab08a8f795ccc0073a50e51d46ad828d4e8"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-class TokenData(BaseModel):
-    username: str or None = None # type: ignore
-
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth_2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
