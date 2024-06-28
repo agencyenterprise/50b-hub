@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from routes.circuits import router as CircuitRouter
+from Hub.routes.proof_requests import router as CircuitRouter
 from routes.users import router as UserRouter
 
 app = FastAPI()
