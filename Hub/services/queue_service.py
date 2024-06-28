@@ -6,7 +6,7 @@ GRAPHS_QUEUE = 'graphs_queue'
 
 parameters = pika.URLParameters(AMQP_URL)
 
-def publish_proof_request(graphUrl: str, graphId: str):
+def publish_proof_request(message_body: str):
     connection = pika.BlockingConnection(parameters)
 
     channel = connection.channel()
@@ -14,6 +14,5 @@ def publish_proof_request(graphUrl: str, graphId: str):
 
     channel.basic_publish(exchange='',
                           routing_key=GRAPHS_QUEUE,
-                          body='Hello CloudAMQP!')
-    # print(f" [x] Sent '{graph}'")
+                          body=message_body)
     connection.close()
