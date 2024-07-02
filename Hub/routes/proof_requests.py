@@ -5,7 +5,9 @@ from services.queue_service import publish_proof_request
 from models.proof_request import ProofRequest
 from config.database import proof_requests_collection
 from schema.schemas import individual_serial, list_serial
+from bson import ObjectId
 import json
+
 
 router = APIRouter()
 
@@ -21,7 +23,7 @@ async def create_proof_request(
     graph_url: str = Body(),
     current_user: User = Depends(get_current_active_user)
 ):
-    proofRequest = ProofRequest(name=name, description=description, graph_url=graph_url, owner_id=current_user._id)
+    proofRequest = ProofRequest(name=name, description=description, graph_url=graph_url, owner_id=ObjectId(current_user._id))
     result = proof_requests_collection.insert_one(proofRequest.dict())
     inserted_id = str(result.inserted_id)
 

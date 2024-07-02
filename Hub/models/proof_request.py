@@ -38,4 +38,8 @@ class ProofRequest(BaseModel):
         user_data = db.users.find_one({"_id": self.owner_id})
         if user_data:
             self.owner = User(**user_data)
+    
+    def dict(self, *args, **kwargs):
+        kwargs.setdefault('exclude', {'owner'})
+        return super().dict(*args, **kwargs)
 
