@@ -2,22 +2,20 @@ from fastapi import APIRouter, Depends, HTTPException, status, Body, Response
 from auth.auth import authenticate_user, create_access_token, get_current_active_user, hash_password
 from config.database import users_collection
 from models.user import User
-from pydantic import EmailStr
+from pydantic import EmailStr, SecretStr, BaseModel, Field
 
 router = APIRouter()
 
+class RegisterBody(BaseModel):
+    full_name: str = Field(min_length=3, max_length=50)
+    email: EmailStr
+    password: str
+
 @router.post("/register")
-async def register(
-    full_name: str = Body(),
-    email: EmailStr = Body(),
-    password: str = Body()
-):
-    user: User = User(
-        full_name=full_name,
-        email=email,
-        hashed_password=hash_password(password)
-    )
-    users_collection.insert_one(dict(user))
+async def register(body: RegisterBody):
+    user = User.model_validate(body, from_attributes=True)
+    user.hashed_password=hash_password(body.password)
+    users_collection.insert_one(User.model_dump(user))
 
 @router.post("/login")
 async def login(
