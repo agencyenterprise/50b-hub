@@ -4,17 +4,16 @@ from models.user import User
 from services.queue_service import publish_proof_request
 from models.proof_request import ProofRequest
 from config.database import proof_requests_collection
-from schema.schemas import individual_serial, list_serial
+from schemas.proof_request_schema import individual_serial, list_serial
 from bson import ObjectId
 import json
-
 
 router = APIRouter()
 
 @router.get("/")
 async def get_circuits():
-    circuits = proof_requests_collection.find()
-    return list_serial(circuits)
+    proofs = proof_requests_collection.find()
+    return list_serial(proofs)
 
 @router.post("/")
 async def create_proof_request(
