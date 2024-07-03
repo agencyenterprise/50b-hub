@@ -11,8 +11,8 @@ import json
 router = APIRouter()
 
 @router.get("/")
-async def get_circuits():
-    proofs = proof_requests_collection.find()
+async def get_proof_requests(current_user: User = Depends(get_current_active_user)):
+    proofs = proof_requests_collection.find({"owner_id": current_user.id })
     return list_serial(proofs)
 
 @router.post("/")
@@ -22,7 +22,7 @@ async def create_proof_request(
     graph_url: str = Body(),
     current_user: User = Depends(get_current_active_user)
 ):
-    proofRequest = ProofRequest(name=name, description=description, graph_url=graph_url, owner_id=ObjectId(current_user._id))
+    proofRequest = ProofRequest(name=name, description=description, graph_url=graph_url, owner_id=ObjectId(current_user.id))
     result = proof_requests_collection.insert_one(proofRequest.dict())
     inserted_id = str(result.inserted_id)
 

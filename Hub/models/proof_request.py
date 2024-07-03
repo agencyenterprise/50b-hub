@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import List, Optional
 from enum import Enum
 from bson import ObjectId
+from models.id import ID
 
 class ChunkStatus(str, Enum):
     PROCESSED = "PROCESSED"
@@ -12,13 +13,19 @@ class ChunkStatus(str, Enum):
     FAILED = "FAILED"
 
 class Chunk(BaseModel):
-    _id: int
+    id: ID = None
     proof_request_id: int
     layer: int
     status: ChunkStatus
 
+    class Config:
+        arbitrary_types_allowed = True
+        json_encoders = {
+            ObjectId: str,
+        }
+
 class ProofRequest(BaseModel):
-    _id: Optional[ObjectId]
+    id: ID = None
     name: str
     description: str
     graph_url: str
@@ -40,6 +47,10 @@ class ProofRequest(BaseModel):
             self.owner = User(**user_data)
     
     def dict(self, *args, **kwargs):
-        kwargs.setdefault('exclude', {'owner'})
+        kwargs.setdefault('exclude', {'owner', 'id'})
         return super().dict(*args, **kwargs)
+    
+    def model_dump(self, *args, **kwargs):
+        kwargs.setdefault('exclude', {'owner', 'id'})
+        return super().model_dump(*args, **kwargs)
 
