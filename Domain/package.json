@@ -1,0 +1,9 @@
+{
+  "name": "Domain",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "protoc": "protoc --proto_path=schemas --python_out=generated domain.proto"
+  }
+}

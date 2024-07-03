@@ -1,0 +1,40 @@
+syntax = "proto3";
+package Domain;
+
+message Gate {
+  enum GateType {
+    NONE = 0;
+    MUL = 1;
+    ADD = 2;
+  }
+  GateType type = 1;
+  int32 l = 2;
+  int32 u = 3;
+  int32 v = 4;
+  int32 lv = 5;
+  int32 c = 6;
+  bool is_assert = 7;
+}
+
+message DadId {
+  repeated int32 id = 1;
+}
+
+message Layer {
+  repeated Gate gates = 1;
+  int32 bitLength = 2;
+  int32 size = 3;
+  repeated DadId dadId = 4;
+  repeated int32 dadBitLength = 5;
+  repeated int32 dadSize = 6;
+  int32 maxDadSize = 7;
+  int32 maxDadBitLength = 8;
+}
+
+message LayeredCircuit {
+  repeated Layer circuit = 1;
+  int32 size = 2;
+  int32 domain = 3;
+  int32 zero = 4;
+  int32 prime = 5;
+}
