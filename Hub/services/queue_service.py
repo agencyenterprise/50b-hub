@@ -1,6 +1,5 @@
 import pika
 
-
 AMQP_URL = 'amqps://mekfotvs:5cAFiGV-rHz2VWyi1K42EonlbfYihC4p@jackal.rmq.cloudamqp.com/mekfotvs'
 GRAPHS_QUEUE = 'graphs_queue'
 
