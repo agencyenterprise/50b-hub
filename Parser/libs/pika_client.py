@@ -1,4 +1,5 @@
 import aio_pika
+import json
 
 class PikaClient:
     def __init__(self, rabbit_url):

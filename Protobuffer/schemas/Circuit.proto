@@ -1,0 +1,25 @@
+syntax = "proto3";
+package Domain;
+
+message GateInputs {
+  repeated int32 inputs = 1;
+}
+
+message Gate {
+  enum GateType {
+    ADD = 0;
+    MUL = 1;
+  }
+  GateType ttype = 1;
+  repeated GateInputs inputs = 2;
+  optional int32 idx = 3;
+}
+
+message CircuitLayer {
+  repeated Gate gates = 1;
+}
+
+message Circuit {
+  repeated CircuitLayer layers = 1;
+  repeated int32 num_inputs = 2;
+}

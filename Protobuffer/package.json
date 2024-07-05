@@ -4,6 +4,6 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "protoc": "protoc --proto_path=schemas --python_out=generated domain.proto"
+    "protoc": "protoc --proto_path=schemas --python_out=domain Circuit.proto"
   }
 }

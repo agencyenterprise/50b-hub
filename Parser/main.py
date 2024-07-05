@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 import os
 from libs.pika_client import PikaClient
+from services.split_service import split
 
 load_dotenv()
 app = FastAPI()
@@ -17,7 +18,9 @@ async def startup():
   loop = asyncio.get_running_loop()
 
   def callback(body):
-    print(f" [x] Received {body}")
+    # print(f" [x] Received {body}")
+    split(body)
+
 
   task = loop.create_task(pika_client.consume('graphs_queue', callback, loop))
   await task
