@@ -7,7 +7,11 @@
     "hub": "cd Hub && poetry install && poetry run uvicorn main:app --reload --port=8000",
     "parser": "cd Parser && poetry install && poetry run uvicorn main:app --reload --port=8001",
     "worker": "cd Worker && poetry install && poetry run uvicorn main:app --reload --port=8002",
-    "protoc": "protoc --proto_path=Protobuffer/schemas --python_out=Hub/protobuffer Circuit.proto && protoc --proto_path=Protobuffer/schemas --python_out=Parser/protobuffer Circuit.proto"
+
+    "protoc_hub": "protoc --proto_path=Protobuffer/schemas --python_out=Hub/protobuffer Circuit.proto",
+    "protoc_parser": "protoc --proto_path=Protobuffer/schemas --python_out=Parser/protobuffer Circuit.proto",
+    "protoc_worker": "protoc --proto_path=Protobuffer/schemas --python_out=Worker/protobuffer Circuit.proto",
+    "protoc": "npm run protoc_hub && npm run protoc_parser && npm run protoc_worker"
   },
   "repository": {
     "type": "git",
