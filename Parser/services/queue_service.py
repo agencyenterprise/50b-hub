@@ -1,11 +1,10 @@
 import aio_pika
-import json
 
 class PikaClient:
     def __init__(self, rabbit_url):
         self.rabbit_url = rabbit_url
 
-    async def consume(self, queue_name, callback, loop):
+    async def consume(self, queue_name: str, callback, loop):
         connection = await aio_pika.connect_robust(self.rabbit_url, loop=loop)
         channel = await connection.channel()
         queue = await channel.declare_queue(queue_name)
@@ -21,3 +20,10 @@ class PikaClient:
 
         return connection
     
+    async def publish(self, queue_name: str, message: str):
+        connection = await aio_pika.connect_robust(self.rabbit_url)
+        channel = await connection.channel()
+        await channel.declare_queue(queue_name)
+
+        await channel.default_exchange.publish(aio_pika.Message(body=message.encode()), routing_key=queue_name)
+        await connection.close()

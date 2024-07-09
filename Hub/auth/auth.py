@@ -40,6 +40,7 @@ def create_access_token(data: dict, expires_delta: timedelta or None = None):
     return encoded_jwt
 
 async def get_current_user(SESSION_TOKEN: str = Cookie(None)):
+    print("SESSION_TOKEN", SESSION_TOKEN)
     credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                          detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
     try:

@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Body, Depends
 from auth.auth import get_current_active_user
 from models.user import User
-from services.queue_service import publish_proof_request
+from services.queue_service import PikaClient
 from models.proof_request import ProofRequest
 from config.database import proof_requests_collection
 from schemas.proof_request_schema import individual_serial, list_serial
 from bson import ObjectId
 import json
+import os
 
 router = APIRouter()
 
@@ -28,9 +29,10 @@ async def create_proof_request(
 
     proof_request_message = {
         'proof_request_id': inserted_id,
-        'graph_url': 'graph_url',
+        'graph_url': graph_url,
     }
 
     proof_request_message_body = json.dumps(proof_request_message)
  
-    publish_proof_request(proof_request_message_body)
+    pika_client = PikaClient(os.environ.get('RABBITMQ_URL'))
+    await pika_client.publish("graphs_queue", proof_request_message_body)

@@ -1,0 +1,22 @@
+{
+  "name": "50b",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "hub": "cd Hub && poetry install && poetry run uvicorn main:app --reload --port=8000",
+    "parser": "cd Parser && poetry install && poetry run uvicorn main:app --reload --port=8001",
+    "worker": "cd Worker && poetry install && poetry run uvicorn main:app --reload --port=8002",
+    "protoc": "protoc --proto_path=Protobuffer/schemas --python_out=Hub/protobuffer Circuit.proto && protoc --proto_path=Protobuffer/schemas --python_out=Parser/protobuffer Circuit.proto"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agencyenterprise/50b-hub.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agencyenterprise/50b-hub/issues"
+  },
+  "homepage": "https://github.com/agencyenterprise/50b-hub#readme"
+}
