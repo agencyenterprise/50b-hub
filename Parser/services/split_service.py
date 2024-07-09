@@ -1,9 +1,9 @@
 from protobuffer.Circuit_pb2 import Circuit
-from services.protobuffer_service import jsonToProtobuff
+from services.protobuffer_service import json_to_protobuff
 
 def split(graph: str):
     circuit = Circuit()
-    circuit.ParseFromString(jsonToProtobuff(graph))
+    circuit.ParseFromString(json_to_protobuff(graph))
 
     print(len(circuit.layers))
 

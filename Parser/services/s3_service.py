@@ -1,2 +1,2 @@
-def getFile(path: str):
+def get_file(path: str):
     return None
