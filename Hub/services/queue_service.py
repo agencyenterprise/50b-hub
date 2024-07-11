@@ -4,7 +4,7 @@ class PikaClient:
     def __init__(self, rabbit_url):
         self.rabbit_url = rabbit_url
 
-    async def consume(self, queue_name: str, callback, loop):
+    async def consume(self, consumer_id: str, queue_name: str, callback, loop):
         connection = await aio_pika.connect_robust(self.rabbit_url, loop=loop)
         channel = await connection.channel()
         queue = await channel.declare_queue(queue_name)
@@ -14,7 +14,7 @@ class PikaClient:
 
             if body:
                 await message.ack()
-                callback(body)
+                await callback(body, consumer_id)
 
         await queue.consume(process_incoming_message)
 

@@ -2,8 +2,10 @@ import asyncio
 from dotenv import load_dotenv
 from fastapi import FastAPI
 import os
+import uuid
+
+from messages.chunk import handle_chunk_message
 from services.queue_service import PikaClient
-import json
 
 load_dotenv()
 app = FastAPI()
@@ -15,11 +17,8 @@ async def main_route():
 
 @app.on_event('startup')
 async def startup():
+  consumer_id = str(uuid.uuid4())
   loop = asyncio.get_running_loop()
 
-  def callback(body):
-    payload = json.loads(body)
-    print(f"Received a message: {payload}")
-
-  task = loop.create_task(pika_client.consume('graphs_queue', callback, loop))
+  task = loop.create_task(pika_client.consume(consumer_id, "chunks_queue", handle_chunk_message, loop))
   await task

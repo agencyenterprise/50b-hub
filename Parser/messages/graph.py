@@ -1,6 +1,6 @@
 import json
 from services.split_service import split
 
-def handle_graph_message(body):
+async def handle_graph_message(body, consumer_id):
     payload = json.loads(body)
-    split(payload.get('graph_url'))
+    await split(payload.get("proof_request_id"), payload.get("graph_url"))
