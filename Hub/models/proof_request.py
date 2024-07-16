@@ -28,7 +28,8 @@ class ProofRequest(BaseModel):
     id: ID = None
     name: str
     description: str
-    graph_url: str
+    proof_provider: str
+    circuit_url: str
     owner_id: ObjectId
     owner: Optional[User] = None
     chunks: List[Chunk] = Field(default_factory=list)

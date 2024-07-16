@@ -20,19 +20,21 @@ async def get_proof_requests(current_user: User = Depends(get_current_active_use
 async def create_proof_request(
     name: str = Body(),
     description: str = Body(),
-    graph_url: str = Body(),
+    proof_provider: str = Body(),
+    circuit_url: str = Body(),
     current_user: User = Depends(get_current_active_user)
 ):
-    proofRequest = ProofRequest(name=name, description=description, graph_url=graph_url, owner_id=ObjectId(current_user.id))
+    proofRequest = ProofRequest(name=name, description=description, proof_provider=proof_provider, circuit_url=circuit_url, owner_id=ObjectId(current_user.id))
     result = proof_requests_collection.insert_one(proofRequest.dict())
     inserted_id = str(result.inserted_id)
 
     proof_request_message = {
-        'proof_request_id': inserted_id,
-        'graph_url': graph_url,
+        "proof_request_id": inserted_id,
+        "proof_provider": proof_provider,
+        "circuit_url": circuit_url,
     }
 
     proof_request_message_body = json.dumps(proof_request_message)
  
-    pika_client = PikaClient(os.environ.get('RABBITMQ_URL'))
-    await pika_client.publish("graphs_queue", proof_request_message_body)
+    pika_client = PikaClient(os.environ.get("RABBITMQ_URL"))
+    await pika_client.publish("circuits_queue", proof_request_message_body)

@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "hub": "cd Hub && poetry run uvicorn main:app --reload --port=8000",
-    "parser": "cd Parser && poetry run uvicorn main:app --reload --port=8001",
-    "worker1": "cd Worker && poetry run uvicorn main:app --reload --port=8002",
-    "worker2": "cd Worker && poetry run uvicorn main:app --reload --port=8003",
+    "hub": "cd Hub && source ./.venv/bin/activate && uvicorn main:app --reload --port=8000",
+    "parser": "cd Parser && source ./.venv/bin/activate && uvicorn main:app --reload --port=8001",
+    "worker1": "cd Worker && source ./.venv/bin/activate && uvicorn main:app --reload --port=8002",
+    "worker2": "cd Worker && source ./.venv/bin/activate && uvicorn main:app --reload --port=8003",
 
     "protoc_hub": "protoc --proto_path=Protobuffer/schemas --python_out=Hub/protobuffer Circuit.proto",
     "protoc_parser": "protoc --proto_path=Protobuffer/schemas --python_out=Parser/protobuffer Circuit.proto",

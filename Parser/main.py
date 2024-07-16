@@ -4,7 +4,7 @@ from fastapi import FastAPI
 import os
 import uuid
 
-from messages.graph import handle_graph_message
+from messages.circuit import handle_circuit_message
 from services.queue_service import PikaClient
 
 load_dotenv()
@@ -20,5 +20,5 @@ async def startup():
   consumer_id = str(uuid.uuid4())
   loop = asyncio.get_running_loop()
 
-  task = loop.create_task(pika_client.consume(consumer_id, 'graphs_queue', handle_graph_message, loop))
+  task = loop.create_task(pika_client.consume(consumer_id, 'circuits_queue', handle_circuit_message, loop))
   await task
