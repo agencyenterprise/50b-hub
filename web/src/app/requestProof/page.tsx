@@ -6,13 +6,14 @@ import Button from "@/components/Button";
 import InputField from "@/components/Input";
 
 import { useChain } from "@/contexts/Chain";
+import JsonInputComponent from "@/components/JsonInputComponent";
 
 const base64ExampleWitness =
   "d3RucwIAAAACAAAAAQAAACgAAAAAAAAAIAAAAAEAAPCT9eFDkXC5eUjoMyhdWIGBtkVQuCmgMeFyTmQwBAAAAAIAAACAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const base64ExampleR1csScript =
   "cjFjcwEAAAADAAAAAgAAAHgAAAAAAAAAAQAAAAIAAAAAAADwk/XhQ5FwuXlI6DMoXViBgbZFULgpoDHhck5kMAEAAAADAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAPCT9eFDkXC5eUjoMyhdWIGBtkVQuCmgMeFyTmQwAQAAAEAAAAAAAAAAIAAAAAEAAPCT9eFDkXC5eUjoMyhdWIGBtkVQuCmgMeFyTmQwBAAAAAEAAAAAAAAAAgAAAAQAAAAAAAAAAQAAAAMAAAAgAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAACAAAAAAAAAAMAAAAAAAAA";
 
-export default function DemoPage() {
+export default function RequestProofPage() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     witness: base64ExampleWitness,
@@ -187,23 +188,12 @@ export default function DemoPage() {
         >
           <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
             <h3 className="text-2xl font-bold tracking-tight text-white pb-6">
-              Use the SDK to generate a witness and submit here to compute a
-              proof
+              Json input
             </h3>
-            <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-              <InputField
-                label="Witness (Base64 encoded)"
-                id="witness"
-                defaultValue={base64ExampleWitness}
-                onChange={handleChange}
-              />
-              <InputField
-                label="R1CS Script (Base64 encoded)"
-                id="r1csScript"
-                defaultValue={base64ExampleR1csScript}
-                onChange={handleChange}
-              />
-            </div>
+            <h2 className="tracking-tight text-gray-100 pb-6">
+              Insert a valid json input
+            </h2>
+            <JsonInputComponent />
             <div className="mt-8 flex justify-end">
               <Button
                 id="send"
