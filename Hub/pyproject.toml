@@ -2,7 +2,7 @@
 name = "50b-hub"
 version = "0.1.0"
 description = ""
-authors = ["kevinkons <kevin.kons@hotmail.com>"]
+authors = ["AE Studio"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

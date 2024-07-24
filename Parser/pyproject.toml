@@ -2,7 +2,7 @@
 name = "parser"
 version = "0.1.0"
 description = ""
-authors = ["Andre Borges Medeiros <andborges@gmail.com>"]
+authors = ["AE Studio"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
