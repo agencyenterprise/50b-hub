@@ -7,6 +7,7 @@ import InputField from "@/components/Input";
 
 import { useChain } from "@/contexts/Chain";
 import JsonInputComponent from "@/components/JsonInputComponent";
+import { isValidJson } from "../../../utils/json";
 
 const base64ExampleWitness =
   "d3RucwIAAAACAAAAAQAAACgAAAAAAAAAIAAAAAEAAPCT9eFDkXC5eUjoMyhdWIGBtkVQuCmgMeFyTmQwBAAAAAIAAACAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -14,6 +15,7 @@ const base64ExampleR1csScript =
   "cjFjcwEAAAADAAAAAgAAAHgAAAAAAAAAAQAAAAIAAAAAAADwk/XhQ5FwuXlI6DMoXViBgbZFULgpoDHhck5kMAEAAAADAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAPCT9eFDkXC5eUjoMyhdWIGBtkVQuCmgMeFyTmQwAQAAAEAAAAAAAAAAIAAAAAEAAPCT9eFDkXC5eUjoMyhdWIGBtkVQuCmgMeFyTmQwBAAAAAEAAAAAAAAAAgAAAAQAAAAAAAAAAQAAAAMAAAAgAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAACAAAAAAAAAAMAAAAAAAAA";
 
 export default function RequestProofPage() {
+  const [jsonInput, setJsonInput] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     witness: base64ExampleWitness,
@@ -36,65 +38,68 @@ export default function RequestProofPage() {
     setLoading(true);
     setProof("");
 
-    setLogs(`Creating a new job...`);
+    console.log("tamo aqui")
+    console.log("test", isValidJson(jsonInput))
 
-    const clientId = localStorage.getItem("clientId");
-    const job = await callHub("/jobs", "POST", {
-      clientId,
-      r1csScript: form.r1csScript,
-    });
+    // setLogs(`Creating a new job...`);
 
-    if (!job.success) {
-      setLogs((logs) => `${logs}Job not created: ${job.error}`);
-      setLoading(false);
-      return;
-    }
+    // const clientId = localStorage.getItem("clientId");
+    // const job = await callHub("/jobs", "POST", {
+    //   clientId,
+    //   r1csScript: form.r1csScript,
+    // });
 
-    setLogs(
-      (logs) =>
-        `${logs}Job ${
-          job.data.id
-        } created.\nEncrypting witness using Worker public key:\n${Buffer.from(
-          job.data.encryptKey,
-          "base64",
-        ).toString("utf-8")}\n`,
-    );
+    // if (!job.success) {
+    //   setLogs((logs) => `${logs}Job not created: ${job.error}`);
+    //   setLoading(false);
+    //   return;
+    // }
 
-    const encryptResponse = await fetch("/api/encrypt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        base64EnclavePublicKey: job.data.encryptKey,
-        base64Witness: form.witness,
-      }),
-    });
-    const { base64EncryptedWitness, base64EncryptedAesKey, base64AesIv } =
-      await encryptResponse.json();
+    // setLogs(
+    //   (logs) =>
+    //     `${logs}Job ${
+    //       job.data.id
+    //     } created.\nEncrypting witness using Worker public key:\n${Buffer.from(
+    //       job.data.encryptKey,
+    //       "base64",
+    //     ).toString("utf-8")}\n`,
+    // );
 
-    setLogs((logs) => `${logs}Witness encrypted succesfuly.\nStarting job...`);
+    // const encryptResponse = await fetch("/api/encrypt", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     base64EnclavePublicKey: job.data.encryptKey,
+    //     base64Witness: form.witness,
+    //   }),
+    // });
+    // const { base64EncryptedWitness, base64EncryptedAesKey, base64AesIv } =
+    //   await encryptResponse.json();
 
-    await callHub("/jobs/start", "POST", {
-      jobId: job.data.id,
-      witness: base64EncryptedWitness,
-      aesKey: base64EncryptedAesKey,
-      aesIv: base64AesIv,
-    });
+    // setLogs((logs) => `${logs}Witness encrypted succesfuly.\nStarting job...`);
 
-    setLogs((logs) => `${logs}Done.\nWaiting for proof...`);
+    // await callHub("/jobs/start", "POST", {
+    //   jobId: job.data.id,
+    //   witness: base64EncryptedWitness,
+    //   aesKey: base64EncryptedAesKey,
+    //   aesIv: base64AesIv,
+    // });
 
-    const jobInterval = setInterval(async () => {
-      const jobInfo = await callHub(`/jobs/${job.data.id}`, "GET");
-      if (jobInfo && jobInfo.data.proof) {
-        setProof(jobInfo.data.proof);
-        clearInterval(jobInterval);
+    // setLogs((logs) => `${logs}Done.\nWaiting for proof...`);
 
-        setLogs((logs) => `${logs}Done.`);
-        fetchEscrowBalance();
-        setLoading(false);
-      }
-    }, 3000);
+    // const jobInterval = setInterval(async () => {
+    //   const jobInfo = await callHub(`/jobs/${job.data.id}`, "GET");
+    //   if (jobInfo && jobInfo.data.proof) {
+    //     setProof(jobInfo.data.proof);
+    //     clearInterval(jobInterval);
+
+    //     setLogs((logs) => `${logs}Done.`);
+    //     fetchEscrowBalance();
+    //     setLoading(false);
+    //   }
+    // }, 3000);
   };
 
   const callHub = async (url: string, method: string, body?: any) => {
@@ -193,18 +198,18 @@ export default function RequestProofPage() {
             <h2 className="tracking-tight text-gray-100 pb-6">
               Insert a valid json input
             </h2>
-            <JsonInputComponent />
-            <div className="mt-8 flex justify-end">
+            <JsonInputComponent jsonString={jsonInput} setJsonString={setJsonInput} />
+            <div className="mt-4 flex flex-col items-end justify-end">
+              {
+                !isValidJson(jsonInput) && jsonInput.length > 0 &&
+                <p className="text-red-400 text-sm mb-1">Invalid JSON</p>
+              }
               <Button
                 id="send"
                 type="submit"
                 label="Compute Proof"
                 disabled={
-                  loading ||
-                  !form.witness ||
-                  !form.r1csScript ||
-                  !escrowBalance ||
-                  escrowBalance.eq(0)
+                  !isValidJson(jsonInput)
                 }
               />
             </div>

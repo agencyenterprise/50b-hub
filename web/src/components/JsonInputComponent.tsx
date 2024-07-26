@@ -6,24 +6,13 @@ const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false 
 
 interface JsonInputComponentProps {
   jsonString: string;
+  setJsonString: (value: string) => void;
 }
 
-const JsonInputComponent: React.FC<JsonInputComponentProps> = ({ jsonString }) => {
-  const [jsonData, setJsonData] = useState<string>(jsonString);
-
-  useEffect(() => {
-    setJsonData(jsonString);
-  }, [jsonString]);
-
-  // Function to handle changes in the Monaco Editor
+const JsonInputComponent: React.FC<JsonInputComponentProps> = ({ jsonString, setJsonString }) => {
   const handleJsonChange = (value: string | undefined) => {
     if (value !== undefined) {
-      try {
-        JSON.parse(value); // Validate JSON
-        setJsonData(value); // Update state if valid
-      } catch (e) {
-        console.error('Invalid JSON');
-      }
+      setJsonString(value);
     }
   };
 
@@ -34,7 +23,7 @@ const JsonInputComponent: React.FC<JsonInputComponentProps> = ({ jsonString }) =
         height="400px"
         defaultLanguage="json"
         theme="vs-dark"
-        value={jsonData}
+        value={jsonString}
         onChange={handleJsonChange}
         options={{
           selectOnLineNumbers: true,
