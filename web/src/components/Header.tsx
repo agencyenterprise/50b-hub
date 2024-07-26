@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import WalletConnect from "./WalletConnect";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -51,9 +50,12 @@ export default function Example() {
             </Link>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <WalletConnect />
-        </div>
+        <Link
+          href="/login"
+          className="text-sm font-semibold leading-6 text-black bg-white px-4 py-2 border rounded-2xl"
+        >
+          Sign up
+        </Link>
       </nav>
       <Dialog
         as="div"
@@ -90,9 +92,9 @@ export default function Example() {
                   </Link>
                 ))}
               </div>
-              <div className="py-6">
+              {/* <div className="py-6">
                 <WalletConnect />
-              </div>
+              </div> */}
             </div>
           </div>
         </Dialog.Panel>
