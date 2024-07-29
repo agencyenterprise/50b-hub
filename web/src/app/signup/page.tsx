@@ -1,10 +1,50 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function FaucetPage() {
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_HUB_URL}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          full_name: name,
+          email,
+          password,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Account successfully created");
+        router.push("/signin");
+      } else {
+        response.json().then((data) => {
+          toast.error(data.detail);
+        })
+      }
+    } catch (error) {
+      console.error("Failed to register user", error);
+    }
+  };
 
   return (
     <div className="bg-gray-900 py-12 sm:py-24 h-screen">
@@ -14,7 +54,7 @@ export default function FaucetPage() {
             Sign up
           </p>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Name
@@ -25,6 +65,8 @@ export default function FaucetPage() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="John"
               required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -37,6 +79,8 @@ export default function FaucetPage() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="john.doe@company.com"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -48,6 +92,8 @@ export default function FaucetPage() {
               id="password"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -59,6 +105,8 @@ export default function FaucetPage() {
               id="confirm_password"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
           <div className="flex justify-between">
@@ -69,12 +117,11 @@ export default function FaucetPage() {
               Submit
             </button>
             <Link
-              href="/login"
+              href="/signin"
               className="text-sm leading-6 text-blue-400"
             >
               Already have an account? Log in
             </Link>
-
           </div>
         </form>
       </div>
