@@ -3,6 +3,8 @@ from auth.auth import authenticate_user, create_access_token, get_current_active
 from config.database import users_collection
 from models.user import User
 from pydantic import EmailStr, SecretStr, BaseModel, Field
+from pymongo.errors import DuplicateKeyError
+
 
 router = APIRouter()
 
@@ -15,7 +17,11 @@ class RegisterBody(BaseModel):
 async def register(body: RegisterBody):
     user = User.model_validate(body, from_attributes=True)
     user.hashed_password=hash_password(body.password)
-    users_collection.insert_one(User.model_dump(user))
+    try:
+        users_collection.insert_one(User.model_dump(user))
+    except DuplicateKeyError:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
 
 @router.post("/login")
 async def login(
