@@ -13,7 +13,7 @@ pika_client = PikaClient(os.environ.get('RABBITMQ_URL'))
 
 @app.get("/") 
 async def main_route():
-  return {"message": "Hey, It is me Parser: " + os.environ.get('RABBITMQ_URL')}
+  return {"message": "Hey, It is me Parser"}
 
 @app.on_event('startup')
 async def startup():

@@ -4,7 +4,7 @@ from fastapi import FastAPI
 import os
 import uuid
 
-from messages.proof import handle_proof_message
+from messages.verification import handle_verification_message
 from routes.proof_requests import router as ProofRequestRouter
 from routes.users import router as UserRouter
 from services.queue_service import PikaClient
@@ -21,5 +21,5 @@ async def startup():
   consumer_id = str(uuid.uuid4())
   loop = asyncio.get_running_loop()
 
-  task = loop.create_task(pika_client.consume(consumer_id, 'proofs_queue', handle_proof_message, loop))
+  task = loop.create_task(pika_client.consume(consumer_id, 'verifications_queue', handle_verification_message, loop))
   await task

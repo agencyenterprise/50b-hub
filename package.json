@@ -5,14 +5,9 @@
   "main": "index.js",
   "scripts": {
     "hub": "cd Hub && source ./.venv/bin/activate && uvicorn main:app --reload --port=8000",
-    "parser": "cd Parser && source ./.venv/bin/activate && uvicorn main:app --reload --port=8001",
+    "verifier1": "cd Verifier && source ./.venv/bin/activate && uvicorn main:app --reload --port=8001",
     "worker1": "cd Worker && source ./.venv/bin/activate && uvicorn main:app --reload --port=8002",
-    "worker2": "cd Worker && source ./.venv/bin/activate && uvicorn main:app --reload --port=8003",
-
-    "protoc_hub": "protoc --proto_path=Protobuffer/schemas --python_out=Hub/protobuffer Circuit.proto",
-    "protoc_parser": "protoc --proto_path=Protobuffer/schemas --python_out=Parser/protobuffer Circuit.proto",
-    "protoc_worker": "protoc --proto_path=Protobuffer/schemas --python_out=Worker/protobuffer Circuit.proto",
-    "protoc": "npm run protoc_hub && npm run protoc_parser && npm run protoc_worker"
+    "worker2": "cd Worker && source ./.venv/bin/activate && uvicorn main:app --reload --port=8003"
   },
   "repository": {
     "type": "git",

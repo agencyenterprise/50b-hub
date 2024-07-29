@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "worker"
+name = "verifier"
 version = "0.1.0"
 description = ""
 authors = ["AE Studio"]
@@ -14,9 +14,6 @@ aio-pika = "^9.4.2"
 protobuf = "^5.27.2"
 sympy = "^1.13.0"
 dohko = {path = "../Dohko", develop = true}
-onnx = "^1.16.1"
-onnxruntime = "^1.18.1"
-graphviz = "^0.20.3"
 
 
 [build-system]
