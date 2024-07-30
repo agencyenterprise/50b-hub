@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-export default function FaucetPage() {
-  const router = useRouter();
+export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,6 +17,7 @@ export default function FaucetPage() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: "include",
         body: JSON.stringify({
           email,
           password,
@@ -27,7 +26,7 @@ export default function FaucetPage() {
 
       if (response.ok) {
         toast.success("Logged with success");
-        router.push("/me");
+        window.location.href = "/me";
       } else {
         response.json().then((data) => {
           toast.error(data.detail);

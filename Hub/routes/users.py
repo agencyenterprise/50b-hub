@@ -4,6 +4,7 @@ from config.database import users_collection
 from models.user import User
 from pydantic import EmailStr, SecretStr, BaseModel, Field
 from pymongo.errors import DuplicateKeyError
+from datetime import timedelta, datetime
 
 
 router = APIRouter()
@@ -35,14 +36,18 @@ async def login(
                             detail="Incorrect email or password", headers={"WWW-Authenticate": "Bearer"})
     access_token = create_access_token(data={"sub": user.email})
 
+    max_age = 60 * 60 * 24 * 7  # 1 week
+    expires = datetime.utcnow() + timedelta(seconds=max_age)
+
     response.set_cookie(
         key="SESSION_TOKEN",
-        # value=user["session_token"],
         value=access_token,
-        secure=True,
         httponly=True,
-        samesite="none",
-        max_age=60*60*24*7
+        samesite="Lax",
+        max_age=max_age,
+        expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
+        path="/"
+
     )
 
     return {"access_token": access_token, "token_type": "bearer"}

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-export default function FaucetPage() {
+export default function SignUp() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
