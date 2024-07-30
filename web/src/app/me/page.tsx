@@ -3,8 +3,14 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+type ProofRequest = {
+  name: string;
+  description: string;
+  ai_model_name: string;
+};
+
 export default function Me() {
-  const [proofRequests, setProofRequests] = useState([]);
+  const [proofRequests, setProofRequests] = useState<ProofRequest[]>([]);
 
   useEffect(() => {
     const fetchProofRequests = async () => {
