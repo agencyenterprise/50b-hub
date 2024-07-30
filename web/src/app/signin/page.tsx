@@ -85,7 +85,7 @@ export default function SignIn() {
               href="/signup"
               className="text-sm leading-6 text-blue-400"
             >
-              Don't have an account? Sign up
+              {"Don't have an account? Sign up"}
             </Link>
 
           </div>
