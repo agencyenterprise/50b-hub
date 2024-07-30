@@ -37,6 +37,9 @@ async def generate_proof(consumer_id: str, proof_request_id: str, ai_model_name:
     prover = ZkProver(layered_circuit)
     proof_transcript = prover.proof_transcript.to_bytes()
 
+    verifier = ZkVerifier(layered_circuit)
+    verification = verifier.run_verifier(proof_transcript)
+
     pika_client = PikaClient(os.environ.get('RABBITMQ_URL'))
 
     await pika_client.publish("proofs_queue", json.dumps({
