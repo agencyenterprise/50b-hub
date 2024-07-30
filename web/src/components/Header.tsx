@@ -1,22 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import WalletConnect from "./WalletConnect";
 import Image from "next/image";
 import Link from "next/link";
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Request Proof", href: "/requestProof" },
-  { name: "Buy credits", href: "/buy" },
-  { name: "Faucet", href: "/faucet" },
-  { name: "Github", href: "#" },
 ];
 
-export default function Example() {
+export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_HUB_URL}/users/me`, {
+      credentials: "include",
+    })
+      .then((response) => {
+        console.log({ response });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setIsLoggedIn(true);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }, []);
 
   return (
     <header className="fixed z-10 left-0 right-0 top-0 bg-black">
@@ -51,9 +67,21 @@ export default function Example() {
             </Link>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <WalletConnect />
-        </div>
+        {isLoggedIn ? (
+          <Link
+            href="/profile"
+            className="text-sm font-semibold leading-6 text-black bg-white px-4 py-2 border rounded-2xl"
+          >
+            {"Logout"}
+          </Link>
+        ) : (
+          <Link
+            href="/signup"
+            className="text-sm font-semibold leading-6 text-black bg-white px-4 py-2 border rounded-2xl"
+          >
+            Sign up
+          </Link>
+        )}
       </nav>
       <Dialog
         as="div"
@@ -89,9 +117,6 @@ export default function Example() {
                     {item.name}
                   </Link>
                 ))}
-              </div>
-              <div className="py-6">
-                <WalletConnect />
               </div>
             </div>
           </div>
