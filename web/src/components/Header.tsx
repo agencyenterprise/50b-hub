@@ -20,7 +20,6 @@ export default function Header() {
       credentials: "include",
     })
       .then((response) => {
-        console.log({ response });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -69,10 +68,10 @@ export default function Header() {
         </div>
         {isLoggedIn ? (
           <Link
-            href="/profile"
+            href="/me"
             className="text-sm font-semibold leading-6 text-black bg-white px-4 py-2 border rounded-2xl"
           >
-            {"Logout"}
+            My proofs
           </Link>
         ) : (
           <Link
