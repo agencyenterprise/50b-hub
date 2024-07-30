@@ -1,9 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function FaucetPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_HUB_URL}/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Logged with success");
+        router.push("/me");
+      } else {
+        response.json().then((data) => {
+          toast.error(data.detail);
+        })
+      }
+    } catch (error) {
+      console.error("Failed to register user", error);
+    }
+  };
   
 
   return (
@@ -14,7 +47,7 @@ export default function FaucetPage() {
             Sign In
           </p>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Email address
@@ -25,6 +58,8 @@ export default function FaucetPage() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="john.doe@company.com"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -36,6 +71,8 @@ export default function FaucetPage() {
               id="password"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="flex justify-between">
