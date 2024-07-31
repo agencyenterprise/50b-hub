@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function SignIn() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,7 +19,6 @@ export default function SignIn() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: "include",
         body: JSON.stringify({
           email,
           password,
@@ -26,7 +27,7 @@ export default function SignIn() {
 
       if (response.ok) {
         toast.success("Logged with success");
-        window.location.href = "/me";
+        router.push("/me");
       } else {
         response.json().then((data) => {
           toast.error(data.detail);
