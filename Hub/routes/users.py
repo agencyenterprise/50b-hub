@@ -43,11 +43,11 @@ async def login(
         key="SESSION_TOKEN",
         value=access_token,
         httponly=True,
-        samesite="Lax",
+        samesite="None",
+        secure=True,
         max_age=max_age,
         expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
         path="/"
-
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
