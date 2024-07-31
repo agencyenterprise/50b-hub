@@ -16,6 +16,7 @@ app = FastAPI()
 origins = [
   "http://localhost:3000",
   "https://50b-hub-production.up.railway.app",
+  "https://ae-50b-hub-872095e68ff2.herokuapp.com"
 ]
 
 app.add_middleware(
