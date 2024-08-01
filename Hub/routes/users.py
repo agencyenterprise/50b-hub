@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, HTTPException, status, Body, Response
 from auth.auth import authenticate_user, create_access_token, get_current_active_user, hash_password
 from config.database import users_collection
@@ -6,6 +8,7 @@ from pydantic import EmailStr, SecretStr, BaseModel, Field
 from pymongo.errors import DuplicateKeyError
 from datetime import timedelta, datetime
 
+load_dotenv()
 
 router = APIRouter()
 
@@ -39,16 +42,28 @@ async def login(
     max_age = 60 * 60 * 24 * 7  # 1 week
     expires = datetime.utcnow() + timedelta(seconds=max_age)
 
-    response.set_cookie(
-        key="SESSION_TOKEN",
-        value=access_token,
-        httponly=True,
-        samesite="Lax",
-        max_age=max_age,
-        expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
-        path="/"
-
-    )
+    env = os.environ.get('RABBITMQ_URL')
+    if env is "local": 
+            response.set_cookie(
+            key="SESSION_TOKEN",
+            value=access_token,
+            httponly=True,
+            samesite="lax",
+            max_age=max_age,
+            expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
+            path="/"
+        )
+    else:
+        response.set_cookie(
+            key="SESSION_TOKEN",
+            value=access_token,
+            httponly=True,
+            samesite="None",
+            secure=True,
+            max_age=max_age,
+            expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
+            path="/"
+        )
 
     return {"access_token": access_token, "token_type": "bearer"}
 
