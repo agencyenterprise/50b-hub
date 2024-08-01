@@ -17,7 +17,7 @@ async def main_route():
 
 @app.on_event('startup')
 async def startup():
-  consumer_id = str(uuid.uuid4())
+  consumer_id = str(uuid.uuid4()) 
   loop = asyncio.get_running_loop()
 
   task = loop.create_task(pika_client.consume(consumer_id, "requests_queue", handle_request_message, loop))
