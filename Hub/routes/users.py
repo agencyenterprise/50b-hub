@@ -43,7 +43,7 @@ async def login(
     expires = datetime.utcnow() + timedelta(seconds=max_age)
 
     env = os.environ.get('ENV')
-    if env is "local": 
+    if env == "local": 
             response.set_cookie(
             key="SESSION_TOKEN",
             value=access_token,
