@@ -42,7 +42,7 @@ async def login(
     max_age = 60 * 60 * 24 * 7  # 1 week
     expires = datetime.utcnow() + timedelta(seconds=max_age)
 
-    env = os.environ.get('RABBITMQ_URL')
+    env = os.environ.get('ENV')
     if env is "local": 
             response.set_cookie(
             key="SESSION_TOKEN",
